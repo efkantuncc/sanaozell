@@ -22,46 +22,27 @@
             width: 100%;
             height: 100vh;
         }
-
-        .loading {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff1744;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
-            animation: pulse 1.5s ease-in-out infinite;
-            z-index: 10;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-        }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">Sana Özel...</div>
     <canvas id="canvas"></canvas>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        const loading = document.getElementById('loading');
 
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
         let particles = [];
-        const particleCount = window.innerWidth < 768 ? 800 : 1500;
+        
+        // Mobil optimizasyon
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 600 : 1200; // Mobil için daha az parçacık
         const formationTime = 7430;
         let startTime = Date.now();
         let isFormed = false;
 
-        // Mobil optimizasyon
-        const isMobile = window.innerWidth < 768;
-        const pixelRatio = isMobile ? 1 : window.devicePixelRatio || 1;
+        const pixelRatio = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2); // Mobilde pixelRatio sınırla
 
         canvas.width = width * pixelRatio;
         canvas.height = height * pixelRatio;
@@ -69,8 +50,8 @@
         canvas.style.height = height + 'px';
         ctx.scale(pixelRatio, pixelRatio);
 
-        // Kalp şekli için parametrik denklem
-        function heartShape(t) {
+        // Kalp çizgisi için parametrik denklem (outline)
+        function heartOutline(t) {
             const scale = isMobile ? 8 : 12;
             return {
                 x: scale * 16 * Math.pow(Math.sin(t), 3),
@@ -78,15 +59,22 @@
             };
         }
 
-        // Kalp şeklinde hedef noktalar oluştur
+        // Kalp çizgisi üzerinde hedef noktalar oluştur
         const targetPoints = [];
         const step = (Math.PI * 2) / particleCount;
+        const lineThickness = isMobile ? 12 : 18; // Çizgi kalınlığı
+        
         for (let i = 0; i < particleCount; i++) {
             const t = i * step;
-            const pos = heartShape(t);
+            const pos = heartOutline(t);
+            
+            // Çizgi kalınlığı için rastgele offset
+            const offset = (Math.random() - 0.5) * lineThickness;
+            const normal = Math.atan2(pos.y, pos.x) + Math.PI / 2;
+            
             targetPoints.push({
-                x: width / 2 + pos.x,
-                y: height / 2 + pos.y - (isMobile ? 30 : 50)
+                x: width / 2 + pos.x + Math.cos(normal) * offset,
+                y: height / 2 + pos.y + Math.sin(normal) * offset - (isMobile ? 30 : 50)
             });
         }
 
@@ -103,7 +91,7 @@
                 this.targetY = targetY;
                 
                 // Görsel özellikler
-                this.size = isMobile ? Math.random() * 2 + 1 : Math.random() * 3 + 1.5;
+                this.size = isMobile ? Math.random() * 1.5 + 1 : Math.random() * 2 + 1.5;
                 this.baseSize = this.size;
                 this.opacity = 0;
                 
@@ -115,10 +103,7 @@
                 
                 // Animasyon özellikleri
                 this.delay = Math.random() * 1000;
-                this.speed = Math.random() * 0.5 + 0.5;
                 this.angle = Math.random() * Math.PI * 2;
-                this.vx = Math.cos(this.angle) * 2;
-                this.vy = Math.sin(this.angle) * 2;
                 
                 // Oluşum sonrası animasyon
                 this.pulseOffset = Math.random() * Math.PI * 2;
@@ -150,20 +135,19 @@
                     // Oluşum tamamlandı
                     if (!isFormed) {
                         isFormed = true;
-                        loading.style.display = 'none';
                     }
                     
-                    // Kalp atışı animasyonu
-                    const heartbeat = Math.sin(elapsed * 0.005 + this.pulseOffset) * 0.15 + 1;
+                    // Çok hafif kalp atışı (daha az belirgin)
+                    const heartbeat = Math.sin(elapsed * 0.003 + this.pulseOffset) * 0.05 + 1;
                     this.size = this.baseSize * heartbeat;
                     
                     // Parıltı efekti
                     this.sparkle = (Math.sin(elapsed * 0.008 + this.pulseOffset * 2) + 1) / 2;
-                    this.opacity = 0.6 + this.sparkle * 0.4;
+                    this.opacity = 0.7 + this.sparkle * 0.3;
                     
-                    // Hafif yüzme hareketi
-                    this.x = this.targetX + Math.sin(elapsed * 0.002 + this.angle) * 2;
-                    this.y = this.targetY + Math.cos(elapsed * 0.002 + this.angle) * 2;
+                    // Çok minimal yüzme hareketi
+                    this.x = this.targetX + Math.sin(elapsed * 0.001 + this.angle) * 0.3;
+                    this.y = this.targetY + Math.cos(elapsed * 0.001 + this.angle) * 0.3;
                 }
             }
 
@@ -172,14 +156,14 @@
                 
                 ctx.save();
                 
-                // Işıltı efekti
-                if (this.sparkle > 0.7) {
-                    const glowSize = this.size * 3;
+                // Işıltı efekti - daha kontrollü
+                if (this.sparkle > 0.75 && isFormed) {
+                    const glowSize = this.size * 2.5;
                     const gradient = ctx.createRadialGradient(
                         this.x, this.y, 0,
                         this.x, this.y, glowSize
                     );
-                    gradient.addColorStop(0, `rgba(255, 23, 68, ${this.opacity * 0.4})`);
+                    gradient.addColorStop(0, `rgba(255, 23, 68, ${this.opacity * 0.3})`);
                     gradient.addColorStop(1, 'rgba(255, 23, 68, 0)');
                     
                     ctx.fillStyle = gradient;
@@ -221,18 +205,29 @@
         }
 
         // Animasyon döngüsü
+        let lastTime = Date.now();
+        const targetFPS = isMobile ? 30 : 60; // Mobilde 30 FPS
+        const frameInterval = 1000 / targetFPS;
+
         function animate() {
-            const elapsed = Date.now() - startTime;
+            const now = Date.now();
+            const delta = now - lastTime;
             
-            // Arka plan - hafif solma efekti
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, width, height);
-            
-            // Parçacıkları güncelle ve çiz
-            particles.forEach(particle => {
-                particle.update(elapsed);
-                particle.draw();
-            });
+            if (delta >= frameInterval) {
+                lastTime = now - (delta % frameInterval);
+                
+                const elapsed = now - startTime;
+                
+                // Arka plan - hafif solma efekti
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.fillRect(0, 0, width, height);
+                
+                // Parçacıkları güncelle ve çiz
+                particles.forEach(particle => {
+                    particle.update(elapsed);
+                    particle.draw();
+                });
+            }
             
             requestAnimationFrame(animate);
         }
@@ -242,15 +237,26 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             
+            canvas.width = width * pixelRatio;
+            canvas.height = height * pixelRatio;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.scale(pixelRatio, pixelRatio);
+            
             // Parçacıkları yeni merkeze göre ayarla
             const newTargetPoints = [];
             const step = (Math.PI * 2) / particleCount;
+            
             for (let i = 0; i < particleCount; i++) {
                 const t = i * step;
-                const pos = heartShape(t);
+                const pos = heartOutline(t);
+                
+                const offset = (Math.random() - 0.5) * lineThickness;
+                const normal = Math.atan2(pos.y, pos.x) + Math.PI / 2;
+                
                 newTargetPoints.push({
-                    x: width / 2 + pos.x,
-                    y: height / 2 + pos.y - (isMobile ? 30 : 50)
+                    x: width / 2 + pos.x + Math.cos(normal) * offset,
+                    y: height / 2 + pos.y + Math.sin(normal) * offset - (isMobile ? 30 : 50)
                 });
             }
             
@@ -259,11 +265,6 @@
                 particle.targetY = newTargetPoints[i].y;
             });
         });
-
-        // Yükleme mesajını kaldır
-        setTimeout(() => {
-            loading.style.display = 'none';
-        }, formationTime + 500);
 
         // Animasyonu başlat
         animate();
