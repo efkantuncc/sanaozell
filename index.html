@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parçacıklı Kalp Animasyonu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            cursor: pointer;
+        }
+
+        .info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-align: center;
+            z-index: 10;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 20, 147, 0.3) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="info">Seninle konuşunca kalbim böyle oluyor ✨</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor(x, y, targetX, targetY) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.targetX = targetX;
+                this.targetY = targetY;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = 0;
+                this.speedY = 0;
+                this.color = this.getRandomColor();
+                this.opacity = 0;
+                this.fadeInSpeed = Math.random() * 0.02 + 0.01;
+                this.reachedTarget = false;
+                this.oscillation = Math.random() * Math.PI * 2;
+                this.oscillationSpeed = Math.random() * 0.05 + 0.02;
+                this.glowIntensity = Math.random() * 0.5 + 0.5;
+            }
+
+            getRandomColor() {
+                const colors = [
+                    [255, 20, 147],   // Deep Pink
+                    [255, 105, 180],  // Hot Pink
+                    [255, 0, 127],    // Bright Pink
+                    [220, 20, 60],    // Crimson
+                    [255, 69, 0],     // Red-Orange
+                    [148, 0, 211]     // Dark Violet
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update(time) {
+                if (time < 7000) {
+                    // İlk 7 saniye: hedefe doğru hareket
+                    const dx = this.targetX - this.x;
+                    const dy = this.targetY - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance > 2) {
+                        const force = distance * 0.00008;
+                        this.speedX += dx * force;
+                        this.speedY += dy * force;
+                        
+                        // Hız sınırlama
+                        this.speedX *= 0.95;
+                        this.speedY *= 0.95;
+                        
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                    } else {
+                        this.reachedTarget = true;
+                        this.x = this.targetX;
+                        this.y = this.targetY;
+                    }
+
+                    // Opacity artışı
+                    if (this.opacity < 1) {
+                        this.opacity += this.fadeInSpeed;
+                    }
+                } else {
+                    // 7 saniye sonra: kalp şeklinde salınım
+                    this.reachedTarget = true;
+                    this.oscillation += this.oscillationSpeed;
+                    
+                    const oscillateX = Math.sin(this.oscillation) * 2;
+                    const oscillateY = Math.cos(this.oscillation * 0.5) * 2;
+                    
+                    this.x = this.targetX + oscillateX;
+                    this.y = this.targetY + oscillateY;
+
+                    // Parlama efekti
+                    this.glowIntensity = Math.sin(time * 0.003 + this.oscillation) * 0.3 + 0.7;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                
+                // Glow efekti
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size * 4
+                );
+                
+                gradient.addColorStop(0, 
+                    `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${this.opacity * this.glowIntensity})`
+                );
+                gradient.addColorStop(0.5, 
+                    `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${this.opacity * this.glowIntensity * 0.3})`
+                );
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Parçacık çekirdeği
+                ctx.fillStyle = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${this.opacity})`;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, 0.8)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        // Kalp şekli oluşturma fonksiyonu
+        function createHeartShape(centerX, centerY, scale) {
+            const points = [];
+            const detail = 1000; // Parçacık sayısı
+            
+            for (let i = 0; i < detail; i++) {
+                const t = (i / detail) * Math.PI * 2;
+                
+                // Parametrik kalp denklemi
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                
+                points.push({
+                    x: centerX + x * scale,
+                    y: centerY + y * scale
+                });
+            }
+            
+            return points;
+        }
+
+        // Kalp şeklini oluştur
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const scale = Math.min(canvas.width, canvas.height) / 40;
+        const heartPoints = createHeartShape(centerX, centerY, scale);
+
+        // Parçacıkları oluştur
+        const particles = heartPoints.map(point => 
+            new Particle(0, 0, point.x, point.y)
+        );
+
+        let startTime = Date.now();
+
+        // Animasyon döngüsü
+        function animate() {
+            const currentTime = Date.now() - startTime;
+            
+            // Arka plan - fade efekti için
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Parçacıkları güncelle ve çiz
+            particles.forEach(particle => {
+                particle.update(currentTime);
+                particle.draw();
+            });
+
+            // Bağlantı çizgileri (7 saniye sonra)
+            if (currentTime > 7000) {
+                particles.forEach((particle, i) => {
+                    if (i % 3 === 0) { // Performans için her 3. parçacık
+                        const nextParticle = particles[(i + 1) % particles.length];
+                        const distance = Math.hypot(
+                            particle.x - nextParticle.x,
+                            particle.y - nextParticle.y
+                        );
+                        
+                        if (distance < 30) {
+                            ctx.strokeStyle = `rgba(255, 105, 180, ${0.1 * particle.opacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particle.x, particle.y);
+                            ctx.lineTo(nextParticle.x, nextParticle.y);
+                            ctx.stroke();
+                        }
+                    }
+                });
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Pencere yeniden boyutlandırma
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.height;
+            
+            const newCenterX = canvas.width / 2;
+            const newCenterY = canvas.height / 2;
+            const newScale = Math.min(canvas.width, canvas.height) / 40;
+            const newHeartPoints = createHeartShape(newCenterX, newCenterY, newScale);
+            
+            particles.forEach((particle, i) => {
+                particle.targetX = newHeartPoints[i].x;
+                particle.targetY = newHeartPoints[i].y;
+            });
+        });
+
+        // Mouse interaksiyon
+        canvas.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            particles.forEach(particle => {
+                const dx = mouseX - particle.x;
+                const dy = mouseY - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    const force = (100 - distance) / 100;
+                    particle.x -= dx * force * 0.03;
+                    particle.y -= dy * force * 0.03;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
