@@ -2,135 +2,117 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EkDate - Panel</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EkDate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --primary: #FF2D55;
-            --primary-dark: #E6194B;
-            --secondary: #5E60CE;
-            --bg-dark: #0A0E27;
-            --bg-card: #151B3D;
-            --text-primary: #FFFFFF;
-            --text-secondary: #A8B3CF;
-            --gradient: linear-gradient(135deg, #FF2D55 0%, #5E60CE 100%);
-            --success: #10B981;
-            --verified-blue: #1DA1F2;
-            --admin-red: #FF0055;
+            --bg: #000000;
+            --bg-card: #0D0D0D;
+            --primary: #FF0055;
+            --text: #FFFFFF;
+            --text-dim: #666666;
+            --verified: #1DA1F2;
+            --admin: #FF0055;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
+            padding-bottom: 80px;
         }
 
         /* Header */
         .header {
-            background: rgba(21, 27, 61, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.2rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #1a1a1a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient);
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF0055, #FF3385);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .header-actions {
+        .header-right {
             display: flex;
+            align-items: center;
             gap: 1rem;
-            align-items: center;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
         }
 
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
         }
 
         .logout-btn {
-            padding: 0.6rem 1.5rem;
-            background: rgba(255, 45, 85, 0.1);
-            border: 1px solid var(--primary);
-            border-radius: 25px;
-            color: var(--primary);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* Navigation */
-        .nav-tabs {
-            background: rgba(21, 27, 61, 0.6);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 2rem;
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-        }
-
-        .nav-tab {
-            padding: 1.2rem 2rem;
+            padding: 0.5rem 1rem;
             background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
+            border: 1px solid #1a1a1a;
+            border-radius: 8px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
         }
 
-        .nav-tab.active {
+        .nav-item.active {
             color: var(--primary);
-            border-bottom-color: var(--primary);
         }
 
-        /* Main Container */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Content */
+        .content {
+            min-height: calc(100vh - 140px);
         }
 
         .tab-content {
@@ -139,33 +121,22 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.4s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Profile Card */
         .profile-card {
-            background: rgba(21, 27, 61, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem;
+            background: var(--bg-card);
             border-radius: 24px;
-            padding: 0;
-            backdrop-filter: blur(20px);
             overflow: hidden;
-            max-width: 500px;
-            margin: 0 auto 2rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid #1a1a1a;
         }
 
         .profile-image-container {
             position: relative;
             width: 100%;
-            padding-top: 125%;
-            background: linear-gradient(135deg, rgba(255, 45, 85, 0.2), rgba(94, 96, 206, 0.2));
-            overflow: hidden;
+            padding-top: 133%;
+            background: #1a1a1a;
         }
 
         .profile-image {
@@ -177,187 +148,147 @@
             object-fit: cover;
         }
 
-        .profile-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(10, 14, 39, 0.95), transparent);
-            padding: 2rem;
+        .profile-info {
+            padding: 1.5rem;
         }
 
         .profile-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .verified-badge {
-            width: 24px;
-            height: 24px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
+            font-size: 1.2rem;
         }
 
-        .verified-blue {
-            color: var(--verified-blue);
-        }
-
+        .verified-blue { color: var(--verified); }
         .admin-badge {
-            background: var(--admin-red);
+            background: var(--admin);
             color: white;
-            padding: 0.3rem 0.8rem;
+            padding: 0.2rem 0.6rem;
             border-radius: 6px;
             font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
-
-        .admin-verified {
-            color: var(--admin-red);
-        }
+        .admin-verified { color: var(--admin); }
 
         .profile-age {
-            color: var(--text-secondary);
-            font-size: 1.3rem;
-            font-weight: 500;
-        }
-
-        .profile-info {
-            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 1.5rem;
         }
 
         .profile-bio {
-            color: var(--text-secondary);
+            color: var(--text-dim);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin-top: 1rem;
         }
 
         .action-buttons {
             display: flex;
-            gap: 1rem;
             justify-content: center;
-            padding: 0 2rem 2rem;
+            gap: 1.5rem;
+            padding: 1.5rem;
         }
 
         .action-btn {
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.8rem;
+            font-size: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
         }
 
         .reject-btn {
-            background: rgba(239, 68, 68, 0.15);
-            color: #EF4444;
-            border: 2px solid rgba(239, 68, 68, 0.3);
+            background: #1a1a1a;
+            color: #ff4444;
         }
 
-        .reject-btn:hover {
-            background: #EF4444;
-            color: white;
-            transform: scale(1.1);
+        .reject-btn:active {
+            transform: scale(0.9);
         }
 
         .like-btn {
-            background: var(--gradient);
+            background: var(--primary);
             color: white;
+            box-shadow: 0 8px 30px rgba(255, 0, 85, 0.3);
         }
 
-        .like-btn:hover {
-            transform: scale(1.15);
-            box-shadow: 0 12px 35px rgba(255, 45, 85, 0.4);
+        .like-btn:active {
+            transform: scale(0.9);
         }
 
-        /* Matches Grid */
-        .matches-grid {
+        /* Grid */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1rem;
         }
 
-        .match-card {
-            background: rgba(21, 27, 61, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        .grid-item {
+            aspect-ratio: 3/4;
+            background: var(--bg-card);
+            border-radius: 16px;
             overflow: hidden;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .match-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .match-image-container {
+            border: 1px solid #1a1a1a;
             position: relative;
-            width: 100%;
-            padding-top: 125%;
-            background: linear-gradient(135deg, rgba(255, 45, 85, 0.1), rgba(94, 96, 206, 0.1));
         }
 
-        .match-image {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .grid-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .match-info {
-            padding: 1.5rem;
+        .grid-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
         }
 
-        .match-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.4rem;
+        .grid-name {
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
-        .match-bio {
-            color: var(--text-secondary);
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-dim);
             font-size: 0.9rem;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
-        /* Chat Container */
-        .chat-container {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 1.5rem;
-            height: calc(100vh - 200px);
-        }
-
+        /* Chat */
         .chat-list {
-            background: rgba(21, 27, 61, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            overflow-y: auto;
             padding: 1rem;
         }
 
@@ -366,18 +297,15 @@
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            border-radius: 14px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 0.5rem;
-        }
-
-        .chat-item:hover {
-            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #1a1a1a;
         }
 
         .chat-item.active {
-            background: rgba(255, 45, 85, 0.1);
+            border-color: var(--primary);
         }
 
         .chat-avatar {
@@ -385,91 +313,101 @@
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--primary);
+            flex-shrink: 0;
         }
 
         .chat-details {
             flex: 1;
+            min-width: 0;
         }
 
         .chat-name {
             font-weight: 600;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
         .chat-preview {
-            color: var(--text-secondary);
+            color: var(--text-dim);
             font-size: 0.85rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .chat-box {
-            background: rgba(21, 27, 61, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            display: flex;
+        .chat-view {
+            display: none;
             flex-direction: column;
-            overflow: hidden;
+            height: calc(100vh - 140px);
+            background: var(--bg-card);
+        }
+
+        .chat-view.active {
+            display: flex;
         }
 
         .chat-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #1a1a1a;
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
+        .back-btn {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         .chat-messages {
             flex: 1;
-            padding: 1.5rem;
             overflow-y: auto;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .message {
-            max-width: 70%;
-            padding: 1rem 1.2rem;
-            border-radius: 18px;
-            line-height: 1.5;
+            max-width: 75%;
+            padding: 0.8rem 1rem;
+            border-radius: 16px;
+            line-height: 1.4;
+            word-wrap: break-word;
         }
 
         .message.sent {
             align-self: flex-end;
-            background: var(--gradient);
+            background: var(--primary);
             color: white;
+            border-bottom-right-radius: 4px;
         }
 
         .message.received {
             align-self: flex-start;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
+            background: #1a1a1a;
+            color: var(--text);
+            border-bottom-left-radius: 4px;
         }
 
         .chat-input-container {
-            padding: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-top: 1px solid #1a1a1a;
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .chat-input {
             flex: 1;
-            padding: 1rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: 'Outfit', sans-serif;
+            padding: 0.8rem 1rem;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
         }
 
         .chat-input:focus {
@@ -478,31 +416,17 @@
         }
 
         .send-btn {
-            padding: 1rem 2rem;
-            background: var(--gradient);
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
             border: none;
-            border-radius: 25px;
+            border-radius: 50%;
             color: white;
-            font-weight: 600;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Popup */
@@ -512,8 +436,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -523,89 +446,60 @@
 
         .popup {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 2.5rem;
-            max-width: 500px;
+            padding: 2rem 1.5rem;
             width: 100%;
-            animation: popupIn 0.3s ease;
-        }
-
-        @keyframes popupIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            max-width: 400px;
+            border: 1px solid #1a1a1a;
         }
 
         .popup h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 1.5rem;
-            background: var(--gradient);
+            background: linear-gradient(135deg, #FF0055, #FF3385);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .popup-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         .form-group input,
         .form-group textarea {
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            color: var(--text-primary);
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
+            width: 100%;
+            padding: 0.8rem;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
-        }
-
-        .image-upload-container {
-            text-align: center;
+            min-height: 80px;
         }
 
         .image-preview {
-            width: 200px;
-            height: 250px;
+            width: 150px;
+            height: 180px;
             margin: 0 auto 1rem;
-            border-radius: 16px;
-            border: 3px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            border: 2px dashed #2a2a2a;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.03);
+            background: #1a1a1a;
         }
 
         .image-preview img {
@@ -614,148 +508,100 @@
             object-fit: cover;
         }
 
-        .image-preview-placeholder {
-            color: var(--text-secondary);
-            font-size: 3rem;
-        }
-
         .upload-btn {
-            padding: 0.8rem 2rem;
-            background: rgba(255, 45, 85, 0.1);
-            border: 2px solid var(--primary);
+            width: 100%;
+            padding: 0.8rem;
+            background: transparent;
+            border: 1px solid var(--primary);
             border-radius: 12px;
             color: var(--primary);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            margin-bottom: 1rem;
         }
 
-        .upload-btn:hover {
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
             background: var(--primary);
+            border: none;
+            border-radius: 12px;
             color: white;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 1024px) {
-            .chat-container {
-                grid-template-columns: 1fr;
-            }
-
-            .chat-list {
-                display: none;
-            }
-
-            .chat-list.mobile-show {
-                display: block;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 1rem;
-            }
-
-            .logo {
-                font-size: 1.5rem;
-            }
-
-            .nav-tabs {
-                padding: 0 1rem;
-            }
-
-            .nav-tab {
-                padding: 1rem 1.5rem;
-                font-size: 0.85rem;
-            }
-
-            .main-container {
-                padding: 1rem;
-            }
-
-            .matches-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 1rem;
-            }
-
-            .popup {
-                padding: 2rem 1.5rem;
-            }
-
-            .message {
-                max-width: 85%;
-            }
+            font-weight: 700;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="logo">EkDate</div>
-        <div class="header-actions">
-            <div class="user-info">
-                <img src="" alt="Profile" class="user-avatar" id="headerAvatar">
-                <span id="headerName"></span>
-            </div>
+        <div class="header-right">
+            <img src="" alt="" class="user-avatar" id="headerAvatar">
             <button class="logout-btn" onclick="logout()">Çıkış</button>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="switchMainTab('discover')">Keşfet</button>
-        <button class="nav-tab" onclick="switchMainTab('matches')">Eşleşmelerim</button>
-        <button class="nav-tab" onclick="switchMainTab('messages')">Mesajlar</button>
-    </div>
-
-    <!-- Main Container -->
-    <div class="main-container">
+    <div class="content">
         <!-- Discover Tab -->
         <div id="discoverTab" class="tab-content active">
             <div id="discoverContent"></div>
         </div>
 
+        <!-- Likes Tab -->
+        <div id="likesTab" class="tab-content">
+            <div class="grid" id="likesGrid"></div>
+        </div>
+
         <!-- Matches Tab -->
         <div id="matchesTab" class="tab-content">
-            <div class="matches-grid" id="matchesGrid"></div>
+            <div class="grid" id="matchesGrid"></div>
         </div>
 
         <!-- Messages Tab -->
         <div id="messagesTab" class="tab-content">
-            <div class="chat-container">
-                <div class="chat-list" id="chatList"></div>
-                <div class="chat-box" id="chatBox">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">💬</div>
-                        <h3>Bir sohbet seç</h3>
-                        <p>Mesajlaşmak için soldaki listeden birini seç</p>
-                    </div>
-                </div>
-            </div>
+            <div class="chat-list" id="chatList"></div>
+            <div class="chat-view" id="chatView"></div>
         </div>
     </div>
 
-    <!-- Profile Setup Popup -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('discover')">
+            <div class="nav-icon">💝</div>
+            <div>Keşfet</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('likes')">
+            <div class="nav-icon">👀</div>
+            <div>Beğenenler</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('matches')">
+            <div class="nav-icon">💕</div>
+            <div>Eşleşmeler</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('messages')">
+            <div class="nav-icon">💬</div>
+            <div>Mesajlar</div>
+        </div>
+    </div>
+
     <div id="profileSetupPopup" class="popup-overlay" style="display: none;">
         <div class="popup">
-            <h2>Profilini Tamamla</h2>
-            <form class="popup-form" onsubmit="completeProfile(event)">
-                <div class="image-upload-container">
-                    <div class="image-preview" id="imagePreview">
-                        <span class="image-preview-placeholder">📷</span>
-                    </div>
-                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
-                    <button type="button" class="upload-btn" onclick="document.getElementById('profileImageInput').click()">
-                        Fotoğraf Yükle
-                    </button>
+            <h2>Profilini Oluştur</h2>
+            <form onsubmit="completeProfile(event)">
+                <div class="image-preview" id="imagePreview">
+                    <span style="font-size: 3rem; opacity: 0.3;">📷</span>
                 </div>
+                <input type="file" id="profileImageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                <button type="button" class="upload-btn" onclick="document.getElementById('profileImageInput').click()">
+                    Fotoğraf Yükle
+                </button>
 
                 <div class="form-group">
-                    <label for="birthdate">Doğum Tarihin</label>
+                    <label>Doğum Tarihin</label>
                     <input type="date" id="birthdate" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="bio">Biyografi</label>
+                    <label>Hakkında</label>
                     <textarea id="bio" placeholder="Kendinden bahset..." required></textarea>
                 </div>
 
@@ -764,6 +610,470 @@
         </div>
     </div>
 
-    <script type="module" src="panel-script.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+        import { getDatabase, ref, get, set, update, push, onValue } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnUMw2ws-v1l_eVUP5wqjMAZP8bAkv7BI",
+            authDomain: "ekdate-12fe4.firebaseapp.com",
+            databaseURL: "https://ekdate-12fe4-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ekdate-12fe4",
+            storageBucket: "ekdate-12fe4.firebasestorage.app",
+            messagingSenderId: "904664644650",
+            appId: "1:904664644650:web:d941eea2b7ee7e4c075753"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        let currentUser = null;
+        let currentUserData = null;
+        let allUsers = [];
+        let likedUsers = [];
+        let dislikedUsers = [];
+        let matches = [];
+        let whoLikesMe = [];
+        let currentChatUser = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserData();
+                await checkProfileSetup();
+                await loadAllUsers();
+                await loadLikesAndMatches();
+                await loadWhoLikesMe();
+                showNextProfile();
+                loadLikes();
+                loadMatches();
+                loadChats();
+            } else {
+                window.location.href = 'app.html';
+            }
+        });
+
+        async function loadUserData() {
+            const userRef = ref(database, 'users/' + currentUser.uid);
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                currentUserData = snapshot.val();
+                document.getElementById('headerAvatar').src = currentUserData.photo || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23FF0055" width="100" height="100"/><text x="50" y="50" font-size="40" text-anchor="middle" dy=".3em" fill="white">' + currentUserData.name.charAt(0) + '</text></svg>';
+            }
+        }
+
+        async function checkProfileSetup() {
+            if (!currentUserData.profileSetup) {
+                document.getElementById('profileSetupPopup').style.display = 'flex';
+            }
+        }
+
+        async function loadAllUsers() {
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                allUsers = [];
+                snapshot.forEach((childSnapshot) => {
+                    const userId = childSnapshot.key;
+                    const userData = childSnapshot.val();
+                    
+                    if (userId !== currentUser.uid && userData.profileSetup) {
+                        if (currentUserData.interestedIn === 'both' || 
+                            currentUserData.interestedIn === userData.gender) {
+                            allUsers.push({ id: userId, ...userData });
+                        }
+                    }
+                });
+                allUsers.sort(() => Math.random() - 0.5);
+            }
+        }
+
+        async function loadLikesAndMatches() {
+            const likesRef = ref(database, 'likes/' + currentUser.uid);
+            const snapshot = await get(likesRef);
+            
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                likedUsers = data.liked || [];
+                dislikedUsers = data.disliked || [];
+            }
+            
+            const matchesRef = ref(database, 'matches/' + currentUser.uid);
+            const matchesSnapshot = await get(matchesRef);
+            
+            if (matchesSnapshot.exists()) {
+                matches = Object.keys(matchesSnapshot.val());
+            }
+        }
+
+        async function loadWhoLikesMe() {
+            whoLikesMe = [];
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                for (const [userId, userData] of Object.entries(snapshot.val())) {
+                    if (userId !== currentUser.uid) {
+                        const likesRef = ref(database, 'likes/' + userId);
+                        const likesSnapshot = await get(likesRef);
+                        
+                        if (likesSnapshot.exists()) {
+                            const likes = likesSnapshot.val().liked || [];
+                            if (likes.includes(currentUser.uid) && !matches.includes(userId)) {
+                                whoLikesMe.push({ id: userId, ...userData });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function showNextProfile() {
+            const discoverContent = document.getElementById('discoverContent');
+            const availableUsers = allUsers.filter(user => 
+                !likedUsers.includes(user.id) && 
+                !dislikedUsers.includes(user.id) &&
+                !matches.includes(user.id)
+            );
+            
+            if (availableUsers.length === 0) {
+                discoverContent.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎉</div>
+                        <h3>Hepsini Gördün!</h3>
+                        <p>Şu an gösterilecek yeni profil yok</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const user = availableUsers[0];
+            const age = calculateAge(user.birthdate);
+            const badge = getBadge(user);
+            
+            discoverContent.innerHTML = `
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img src="${user.photo || getDefaultAvatar(user.name)}" class="profile-image">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">
+                            ${user.name} ${badge}
+                            <span class="profile-age">${age}</span>
+                        </div>
+                        <p class="profile-bio">${user.bio || ''}</p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn reject-btn" onclick="handleReject('${user.id}')">✕</button>
+                        <button class="action-btn like-btn" onclick="handleLike('${user.id}')">💖</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateAge(birthdate) {
+            const today = new Date();
+            const birth = new Date(birthdate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const m = today.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+            return age;
+        }
+
+        function getBadge(user) {
+            if (user.admin == 1 && user.verified == 1) {
+                return '<span class="verified-badge admin-verified">✓</span><span class="admin-badge">ADMIN</span>';
+            } else if (user.verified == 1) {
+                return '<span class="verified-badge verified-blue">✓</span>';
+            }
+            return '';
+        }
+
+        function getDefaultAvatar(name) {
+            return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500"><rect fill="%23FF0055" width="400" height="500"/><text x="200" y="250" font-size="120" text-anchor="middle" dy=".3em" fill="white">' + name.charAt(0) + '</text></svg>';
+        }
+
+        window.handleLike = async function(userId) {
+            likedUsers.push(userId);
+            await update(ref(database, 'likes/' + currentUser.uid), { liked: likedUsers });
+            
+            const otherUserLikesRef = ref(database, 'likes/' + userId);
+            const snapshot = await get(otherUserLikesRef);
+            
+            if (snapshot.exists()) {
+                const otherUserLikes = snapshot.val().liked || [];
+                if (otherUserLikes.includes(currentUser.uid)) {
+                    await set(ref(database, 'matches/' + currentUser.uid + '/' + userId), true);
+                    await set(ref(database, 'matches/' + userId + '/' + currentUser.uid), true);
+                    matches.push(userId);
+                    alert('🎉 Eşleşme! Mesajlaşabilirsiniz!');
+                }
+            }
+            
+            showNextProfile();
+        }
+
+        window.handleReject = async function(userId) {
+            dislikedUsers.push(userId);
+            await update(ref(database, 'likes/' + currentUser.uid), { disliked: dislikedUsers });
+            showNextProfile();
+        }
+
+        function loadLikes() {
+            const likesGrid = document.getElementById('likesGrid');
+            
+            if (whoLikesMe.length === 0) {
+                likesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon">💔</div>
+                        <h3>Henüz Beğeni Yok</h3>
+                        <p>Seni beğiren biri olunca burada görünecek</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            likesGrid.innerHTML = '';
+            whoLikesMe.forEach(user => {
+                const age = calculateAge(user.birthdate);
+                const badge = getBadge(user);
+                
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerHTML = `
+                    <img src="${user.photo || getDefaultAvatar(user.name)}" class="grid-image">
+                    <div class="grid-overlay">
+                        <div class="grid-name">${user.name} ${badge} ${age}</div>
+                    </div>
+                `;
+                likesGrid.appendChild(item);
+            });
+        }
+
+        async function loadMatches() {
+            const matchesGrid = document.getElementById('matchesGrid');
+            
+            if (matches.length === 0) {
+                matchesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon">💕</div>
+                        <h3>Henüz Eşleşme Yok</h3>
+                        <p>Keşfet sekmesinden beğenmeye başla!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            matchesGrid.innerHTML = '';
+            for (const matchId of matches) {
+                const userRef = ref(database, 'users/' + matchId);
+                const snapshot = await get(userRef);
+                
+                if (snapshot.exists()) {
+                    const user = snapshot.val();
+                    const age = calculateAge(user.birthdate);
+                    const badge = getBadge(user);
+                    
+                    const item = document.createElement('div');
+                    item.className = 'grid-item';
+                    item.onclick = () => openChat(matchId);
+                    item.innerHTML = `
+                        <img src="${user.photo || getDefaultAvatar(user.name)}" class="grid-image">
+                        <div class="grid-overlay">
+                            <div class="grid-name">${user.name} ${badge} ${age}</div>
+                        </div>
+                    `;
+                    matchesGrid.appendChild(item);
+                }
+            }
+        }
+
+        async function loadChats() {
+            const chatList = document.getElementById('chatList');
+            
+            if (matches.length === 0) {
+                chatList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💬</div>
+                        <h3>Mesaj Yok</h3>
+                        <p>Eşleşince mesajlaşabilirsin</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            chatList.innerHTML = '';
+            for (const matchId of matches) {
+                const userRef = ref(database, 'users/' + matchId);
+                const snapshot = await get(userRef);
+                
+                if (snapshot.exists()) {
+                    const user = snapshot.val();
+                    const badge = getBadge(user);
+                    
+                    const item = document.createElement('div');
+                    item.className = 'chat-item';
+                    item.onclick = () => openChat(matchId);
+                    item.innerHTML = `
+                        <img src="${user.photo || getDefaultAvatar(user.name)}" class="chat-avatar">
+                        <div class="chat-details">
+                            <div class="chat-name">${user.name} ${badge}</div>
+                            <div class="chat-preview">Mesajlaş</div>
+                        </div>
+                    `;
+                    chatList.appendChild(item);
+                }
+            }
+        }
+
+        async function openChat(userId) {
+            currentChatUser = userId;
+            const userRef = ref(database, 'users/' + userId);
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const user = snapshot.val();
+                const badge = getBadge(user);
+                
+                const chatView = document.getElementById('chatView');
+                chatView.innerHTML = `
+                    <div class="chat-header">
+                        <div class="back-btn" onclick="closeChat()">←</div>
+                        <img src="${user.photo || getDefaultAvatar(user.name)}" class="chat-avatar">
+                        <div class="chat-details">
+                            <div class="chat-name">${user.name} ${badge}</div>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="messageInput" placeholder="Mesaj yaz...">
+                        <button class="send-btn" onclick="sendMessage()">➤</button>
+                    </div>
+                `;
+                
+                document.getElementById('chatList').style.display = 'none';
+                chatView.classList.add('active');
+                
+                loadMessages(userId);
+                
+                document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') sendMessage();
+                });
+            }
+        }
+
+        window.closeChat = function() {
+            document.getElementById('chatView').classList.remove('active');
+            document.getElementById('chatList').style.display = 'block';
+            currentChatUser = null;
+        }
+
+        function loadMessages(userId) {
+            const chatId = [currentUser.uid, userId].sort().join('_');
+            const messagesRef = ref(database, 'messages/' + chatId);
+            
+            onValue(messagesRef, (snapshot) => {
+                const chatMessages = document.getElementById('chatMessages');
+                if (!chatMessages) return;
+                
+                chatMessages.innerHTML = '';
+                
+                if (snapshot.exists()) {
+                    const messages = [];
+                    snapshot.forEach((child) => {
+                        messages.push({ id: child.key, ...child.val() });
+                    });
+                    
+                    messages.sort((a, b) => a.timestamp - b.timestamp);
+                    
+                    messages.forEach(msg => {
+                        const div = document.createElement('div');
+                        div.className = msg.senderId === currentUser.uid ? 'message sent' : 'message received';
+                        div.textContent = msg.text;
+                        chatMessages.appendChild(div);
+                    });
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+        }
+
+        window.sendMessage = async function() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text || !currentChatUser) return;
+            
+            const chatId = [currentUser.uid, currentChatUser].sort().join('_');
+            await push(ref(database, 'messages/' + chatId), {
+                senderId: currentUser.uid,
+                text: text,
+                timestamp: Date.now()
+            });
+            
+            input.value = '';
+        }
+
+        window.completeProfile = async function(e) {
+            e.preventDefault();
+            
+            const birthdate = document.getElementById('birthdate').value;
+            const bio = document.getElementById('bio').value;
+            const photo = document.getElementById('imagePreview').querySelector('img')?.src || '';
+            
+            if (calculateAge(birthdate) < 18) {
+                alert('18 yaşından küçükler kayıt olamaz!');
+                return;
+            }
+            
+            await update(ref(database, 'users/' + currentUser.uid), {
+                birthdate: birthdate,
+                bio: bio,
+                photo: photo,
+                profileSetup: true
+            });
+            
+            document.getElementById('profileSetupPopup').style.display = 'none';
+            location.reload();
+        }
+
+        window.handleImageUpload = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        window.switchTab = function(tab) {
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            navItems.forEach(item => item.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            const index = ['discover', 'likes', 'matches', 'messages'].indexOf(tab);
+            navItems[index].classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'likes') loadLikes();
+            if (tab === 'matches') loadMatches();
+            if (tab === 'messages') {
+                loadChats();
+                closeChat();
+            }
+        }
+
+        window.logout = async function() {
+            await signOut(auth);
+            window.location.href = 'app.html';
+        }
+    </script>
 </body>
 </html>
