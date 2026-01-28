@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EkDate - Giriş Yap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF2D55;
+            --primary-dark: #E6194B;
+            --secondary: #5E60CE;
+            --bg-dark: #0A0E27;
+            --bg-card: #151B3D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A8B3CF;
+            --gradient: linear-gradient(135deg, #FF2D55 0%, #5E60CE 100%);
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: float 25s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -150px;
+            left: -150px;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 7s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(80px, -80px) scale(1.1); }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+            margin: 2rem auto;
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Auth Card */
+        .auth-card {
+            background: rgba(21, 27, 61, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.4rem;
+            border-radius: 16px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.9rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.3);
+        }
+
+        /* Forms */
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* Gender Selection */
+        .gender-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .gender-option {
+            position: relative;
+        }
+
+        .gender-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .gender-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .gender-option input[type="radio"]:checked + label {
+            background: rgba(255, 45, 85, 0.1);
+            border-color: var(--primary);
+        }
+
+        .gender-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gender-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 45, 85, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 45, 85, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Back Link */
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+            }
+
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .logo h1 {
+                font-size: 2.5rem;
+            }
+
+            .gender-group {
+                gap: 0.8rem;
+            }
+
+            .gender-option label {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo">
+            <h1>EkDate</h1>
+            <p>Yeni tanışmaların en şık adresi</p>
+        </div>
+
+        <div class="auth-card">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Giriş Yap</button>
+                <button class="tab" onclick="switchTab('register')">Kayıt Ol</button>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="form-container active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="loginEmail">E-posta</label>
+                        <input type="email" id="loginEmail" placeholder="ornek@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Şifre</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Giriş Yap</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="form-container">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="registerName">İsim</label>
+                        <input type="text" id="registerName" placeholder="Adın nedir?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">E-posta</label>
+                        <input type="email" id="registerEmail" placeholder="ornek@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Şifre</label>
+                        <input type="password" id="registerPassword" placeholder="••••••••" minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cinsiyet</label>
+                        <div class="gender-group">
+                            <div class="gender-option">
+                                <input type="radio" id="male" name="gender" value="male" required>
+                                <label for="male">
+                                    <span class="gender-icon">👨</span>
+                                    <span class="gender-text">Erkek</span>
+                                </label>
+                            </div>
+                            <div class="gender-option">
+                                <input type="radio" id="female" name="gender" value="female" required>
+                                <label for="female">
+                                    <span class="gender-icon">👩</span>
+                                    <span class="gender-text">Kadın</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interestedIn">Kimle tanışmak istersin?</label>
+                        <select id="interestedIn" required>
+                            <option value="">Seç...</option>
+                            <option value="male">Erkeklerle</option>
+                            <option value="female">Kadınlarla</option>
+                            <option value="both">Herkesle</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Hesap Oluştur</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Ana Sayfaya Dön</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnUMw2ws-v1l_eVUP5wqjMAZP8bAkv7BI",
+            authDomain: "ekdate-12fe4.firebaseapp.com",
+            databaseURL: "https://ekdate-12fe4-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ekdate-12fe4",
+            storageBucket: "ekdate-12fe4.firebasestorage.app",
+            messagingSenderId: "904664644650",
+            appId: "1:904664644650:web:d941eea2b7ee7e4c075753"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        // Make functions globally available
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = 'mypanel.html';
+            } catch (error) {
+                showError('E-posta veya şifre hatalı!');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const interestedIn = document.getElementById('interestedIn').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const userId = userCredential.user.uid;
+
+                await set(ref(database, 'users/' + userId), {
+                    name: name,
+                    email: email,
+                    gender: gender,
+                    interestedIn: interestedIn,
+                    verified: 0,
+                    admin: 0,
+                    bio: '',
+                    birthdate: '',
+                    profileSetup: false,
+                    createdAt: Date.now()
+                });
+
+                window.location.href = 'mypanel.html';
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    showError('Bu e-posta zaten kullanımda!');
+                } else {
+                    showError('Kayıt olurken bir hata oluştu!');
+                }
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+
+    <script>
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form-container');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+            
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
